@@ -1,0 +1,204 @@
+//您自己的js代码写到下面
+
+console.log("jquery !");
+
+jQuery(document).ready(function ($) {
+    // 强制用户使用手机号
+    // $("#login-box > div > div > div > form > div.login-box-in > label:nth-child(3) > span > b").text("手机号");
+    // $("#login-box > div > div > div > form > div.login-box-in > label:nth-child(3) > span > b").text("手机号（用户名）");
+    // $("#login-box > div > div > div > form > div.login-box-in > label:nth-child(3) > p:nth-child(3)").text("用于登录及保护您的账户安全");
+
+
+
+    // 顶部菜单栏修改
+    $("#page > div.site-header.mg-b.social-top.social-no-sub > div > div > div > div.header-banner-right > div.top-search.mobile-hidden > form").hide();
+    $("#page > div.site-header.mg-b.social-top.social-no-sub > div > div > div > div.header-banner-right > div.header-user > div.change-theme > div.mobile-show").hide();
+    $("#page > div.site-header.mg-b.social-top.social-no-sub > div > div > div > div.header-banner-right > div.header-user > div.change-theme > div.mobile-hidden.user-tips"
+    ).hide();
+
+    // 侧边栏
+    $("div.bar-item:contains('搜索')").hide();
+    $("#content > div.aside-container > div.aside-bar > div > div.gdd-quick-link-buy-vip > a > div > p").text("会员专属权益");
+    $("#content > div.aside-container > div.aside-bar > div > div.gdd-quick-link-buy-vip > div > div > p.gdd-quick-link-buy-vip__popover--title").text("昆仑AI会员");
+    $("#content > div.aside-container > div.aside-bar > div > div.gdd-quick-link-buy-vip > div > div > p.gdd-quick-link-buy-vip__popover--desc").text("解锁 10+ 高级功能");
+    $("#content > div.aside-container > div.aside-bar > div > div.gdd-quick-link-buy-vip > div > div > a > p").text("查看详情");
+
+    // 手机端底部菜单栏
+    $("#mobile-footer-menu > div.mobile-footer-center").hide();
+
+    // 个人中心
+    $("p.b2-pd:contains('描述：')").hide();
+    $("p.b2-pd:contains('网址：')").hide();
+    $("p.b2-pd:contains('认证：')").hide();
+
+    $("li:has(div.edit-name:contains('网址'))").hide();
+
+    // 修改会员图标
+    var element = $('#author > div.box.b2-radius.author-header > div.user-panel > div.user-panel-info > div:nth-child(1) > h1 > span.user-page-lv > span.lv-icon.user-vip[class*="b2-vip"] > b');
+    var color = element.css("color");
+    element.css({
+        "background-color": color,
+        color: "white",
+        "border-radius": "5px",
+        padding: "2px 6px",
+        "font-weight": "bold",
+    });
+
+    // 计算用户剩余会员时长
+    function getRemainingDays(targetDateString) {
+        // 将给定的日期字符串转换为Date对象
+        let targetDate = new Date(targetDateString);
+        // 获取当前日期
+        let currentDate = new Date();
+
+        // 计算两个日期之间的毫秒差
+        let timeDifference = targetDate - currentDate;
+
+        // 将毫秒差转换为天数
+        let daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+        return daysDifference;
+    }
+
+    // 根据用户不同身份切换页面显示
+    function switchUserPage(user_status, user_info) {
+
+
+
+        const text_choose_ai_tips = $('#choose-ai-tips > div > h2');
+        // const selector_choose_ai_tips = '#choose-ai-tips > div > h2';
+        // const selector_go_kunlun_plus = '#go-kunlun-plus > div > div > a';
+        const button_go_kunlun_plus = $('#go-kunlun-plus > div > div > a');
+        button_go_kunlun_plus.off('click');
+
+
+
+
+        const button_go_kunlun_copilot = $('#go-kunlun-copilot > div > div > a');
+        button_go_kunlun_copilot.off('click');
+        // button_go_kunlun_copilot.text('立即使用');
+        button_go_kunlun_copilot.attr('href', 'https://chat.todaoke.com');
+        button_go_kunlun_copilot.on('click', function (e) {
+            // 阻止按钮的默认行为，例如如果它是一个链接则阻止它跳转
+            // e.preventDefault();
+
+            // 显示提示信息
+            alert('📢昆仑AI领航版与现有平台不互通，因此您需要重新注册账户并登录。\n\n由于当前处于开放测试阶段，所以不排除出现使用异常的情况，如果使用中出现问题，您可以向在线客服进行反馈。\n\n如果您当前会员尚未过期，可联系在线客服免费领取会员公测专属福利~~');
+        });
+
+
+        switch (user_status) {
+            case 'no_login':  // 用户未登录
+                text_choose_ai_tips.text('您当前尚未登录，仅可使用昆仑AI免费版');
+                // button_go_kunlun_plus.off('click');
+                // 为按钮绑定新的点击事件处理程序
+                button_go_kunlun_plus.on('click', function (e) {
+                    // 阻止按钮的默认行为，例如如果它是一个链接则阻止它跳转
+                    // e.preventDefault();
+
+                    // 显示提示信息
+                    alert('昆仑AI全能版为会员专享权益，您当前尚未登录。如果您已经是昆仑AI会员用户，请先登录您的账户。');
+                });
+                
+                
+                $('#kunlun-plus-container').text('昆仑AI全能版为会员专享权益，您当前尚未登录。如果您已经是昆仑AI会员用户，请先登录您的账户。');
+
+
+                break;
+            case 'no_vip':  // 用户不是vip
+                text_choose_ai_tips.text('您当前尚未开通会员，仅可使用昆仑AI免费版');
+                // button_go_kunlun_plus.off('click');
+                // 为按钮绑定新的点击事件处理程序
+                button_go_kunlun_plus.on('click', function (e) {
+                    // 阻止按钮的默认行为，例如如果它是一个链接则阻止它跳转
+                    e.preventDefault();
+                    // 显示提示信息
+                    alert('昆仑AI全能版为会员专享权益，您尚未开通昆仑AI会员服务。如果您希望使用当前AI，请先前往会员中心开通会员服务。');
+                });
+                
+                
+                $('#kunlun-plus-container').text('昆仑AI全能版为会员专享权益，您尚未开通昆仑AI会员服务。如果您希望使用当前AI，请先前往会员中心开通会员服务。');
+
+
+
+                break;
+            case 'vip':  // 用户是vip
+                text_choose_ai_tips.text(`尊敬的昆仑AI${user_info.lv.vip.name}，您已解锁全部AI，剩余会员时长：${getRemainingDays(user_info.lv.vip.time)}天`);
+                button_go_kunlun_plus.text('立即使用');
+                button_go_kunlun_plus.attr('href', '/kunlun-plus');
+
+                // 为会员用户添加昆仑全能版iframe
+                // 创建一个iframe元素
+                const iframe = $('<iframe>', {
+                    src: 'https://service-kunlun-plus.todaoke.com',
+                    width: '100%',
+                    height: '700px',
+                    frameborder: '0',
+                    scrolling: 'no'
+                });
+
+                // 将iframe添加到id为kunlun-plus-container的div内部
+                $('#kunlun-plus-container').empty();
+                $('#kunlun-plus-container').append(iframe);
+
+                break;
+            case 'error':  // 出现错误
+                $(selector_choose_ai_tips).text(`获取用户信息失败，请稍后。如果您长期遇到此提示，请向人工客服反馈`);
+
+
+                break;
+
+            default:  // 其他情况
+                break;
+        };
+    }
+
+    // 获取用户会员状态
+    function getCookie(name) {
+        let value = "; " + document.cookie;
+        let parts = value.split("; " + name + "=");
+        if (parts.length === 2) {
+            return parts.pop().split(";").shift();
+        }
+    }
+    let b2_token = getCookie("b2_token");
+    $.ajax({
+        url: "/wp-json/b2/v1/getUserInfo",
+        method: "POST",
+        headers: {
+            Authorization: "Bearer " + b2_token,
+        },
+        success: function (response) {
+            if (response && response.user_data && response.user_data.lv && response.user_data.lv.vip) {
+                if (response.user_data.lv.vip.hasOwnProperty('name')) { // 检查name属性是否存在
+                    var vipName = response.user_data.lv.vip.name;
+
+                    if (vipName) { // 如果name有值，则用户是VIP
+                        switchUserPage('vip', response.user_data);
+                        console.log("用户是VIP: " + vipName);
+                    } else { // 如果name没有值或为空，则用户不是VIP
+                        switchUserPage('no_vip', response.user_data);
+                        console.log("用户不是VIP");
+                    }
+                } else { // 如果name属性不存在，则用户不是VIP
+                    switchUserPage('no_vip', response.user_data);
+                    console.log("用户不是VIP");
+                }
+            } else { // 如果数据结构与预期不符，则输出错误信息
+                switchUserPage('error');
+
+                console.log("获取用户身份信息失败");
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status == 403) {
+                switchUserPage('no_login');
+                console.log("用户未登录");
+            } else {
+                console.log("错误:", textStatus, errorThrown);
+            }
+        },
+    });
+});
+
